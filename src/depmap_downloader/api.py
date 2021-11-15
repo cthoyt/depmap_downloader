@@ -19,6 +19,9 @@ __all__ = [
 ]
 
 URL = "https://depmap.org/portal/download/api/downloads"
+DEPMAP_MODULE = pystow.module("bio", "depmap")
+ACHILLES_NAME = "Achilles_gene_dependency.csv"
+CRISPR_NAME = "CRISPR_gene_dependency.csv"
 
 
 @lru_cache(1)
@@ -27,15 +30,12 @@ def get_downloads_table():
     return requests.get(URL).json()
 
 
-DEPMAP_MODULE = pystow.module("bio", "depmap")
-ACHILLES_NAME = "Achilles_gene_dependency.csv"
-CRISPR_NAME = "CRISPR_gene_dependency.csv"
-
-
 @lru_cache(1)
 def get_latest() -> str:
     """Get the latest release name."""
-    latest = next(release for release in get_downloads_table()["releaseData"] if release["isLatest"])
+    latest = next(
+        release for release in get_downloads_table()["releaseData"] if release["isLatest"]
+    )
     return latest["releaseName"]
 
 
