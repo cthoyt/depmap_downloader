@@ -32,35 +32,47 @@
     </a>
 </p>
 
-Reproducibly/automatically download data from the DepMap.
+Reproducibly/automatically download data from
+the [Cancer Dependency Map](https://depmap.org).
 
 ## 💪 Getting Started
 
-> TODO show in a very small amount of space the **MOST** useful thing your package can do.
-Make it as short as possible! You have an entire set of docs for later.
+The DepMap has a secret API that this package wraps, so you can always get the
+latest version of some select datasets
+using [`pystow`](https://github.com/cthoyt/pystow).
 
-### Command Line Interface
+Get the Achilles gene dependencies:
 
-The depmap_downloader command line tool is automatically installed. It can
-be used from the shell with the `--help` flag to show all subcommands:
+```python
+from depmap_downloader import ensure_achilles_gene_dependencies
 
-```shell
-$ depmap_downloader --help
+# With a version
+path = ensure_achilles_gene_dependencies(version="DepMap Public 21Q4")
+
+# Get the latest
+path = ensure_achilles_gene_dependencies()
 ```
 
-> TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
-by `sphinx`.
+Same for the CRISPR gene dependencies:
+
+```python
+from depmap_downloader import ensure_crispr_gene_dependencies
+
+# With a version
+path = ensure_crispr_gene_dependencies(version="DepMap Public 21Q4")
+
+# Get the latest
+path = ensure_crispr_gene_dependencies()
+```
 
 ## 🚀 Installation
 
-<!-- Uncomment this section after your first ``tox -e finish``
 The most recent release can be installed from
 [PyPI](https://pypi.org/project/depmap_downloader/) with:
 
 ```bash
 $ pip install depmap_downloader
 ```
--->
 
 The most recent code and data can be installed directly from GitHub with:
 
@@ -78,8 +90,10 @@ $ pip install -e .
 
 ## 👐 Contributing
 
-Contributions, whether filing an issue, making a pull request, or forking, are appreciated. See
-[CONTRIBUTING.rst](https://github.com/cthoyt/depmap_downloader/blob/master/CONTRIBUTING.rst) for more information on getting involved.
+Contributions, whether filing an issue, making a pull request, or forking, are
+appreciated. See
+[CONTRIBUTING.rst](https://github.com/cthoyt/depmap_downloader/blob/master/CONTRIBUTING.rst)
+for more information on getting involved.
 
 ## 👋 Attribution
 
@@ -114,34 +128,41 @@ This project has been supported by the following grants:
 
 ### 🍪 Cookiecutter
 
-This package was created with [@audreyfeldroy](https://github.com/audreyfeldroy)'s
-[cookiecutter](https://github.com/cookiecutter/cookiecutter) package using [@cthoyt](https://github.com/cthoyt)'s
-[cookiecutter-snekpack](https://github.com/cthoyt/cookiecutter-snekpack) template.
+This package was created
+with [@audreyfeldroy](https://github.com/audreyfeldroy)'s
+[cookiecutter](https://github.com/cookiecutter/cookiecutter) package
+using [@cthoyt](https://github.com/cthoyt)'s
+[cookiecutter-snekpack](https://github.com/cthoyt/cookiecutter-snekpack)
+template.
 
 ## 🛠️ For Developers
 
 <details>
   <summary>See developer instrutions</summary>
 
-  
-The final section of the README is for if you want to get involved by making a code contribution.
+
+The final section of the README is for if you want to get involved by making a
+code contribution.
 
 ### ❓ Testing
 
-After cloning the repository and installing `tox` with `pip install tox`, the unit tests in the `tests/` folder can be
-run reproducibly with:
+After cloning the repository and installing `tox` with `pip install tox`, the
+unit tests in the `tests/` folder can be run reproducibly with:
 
 ```shell
 $ tox
 ```
 
-Additionally, these tests are automatically re-run with each commit in a [GitHub Action](https://github.com/cthoyt/depmap_downloader/actions?query=workflow%3ATests).
+Additionally, these tests are automatically re-run with each commit in
+a [GitHub Action](https://github.com/cthoyt/depmap_downloader/actions?query=workflow%3ATests)
+.
 
 ### 📦 Making a Release
 
 After installing the package in development mode and installing
-`tox` with `pip install tox`, the commands for making a new release are contained within the `finish` environment
-in `tox.ini`. Run the following from the shell:
+`tox` with `pip install tox`, the commands for making a new release are
+contained within the `finish` environment in `tox.ini`. Run the following from
+the shell:
 
 ```shell
 $ tox -e finish
@@ -152,9 +173,11 @@ This script does the following:
 1. Uses BumpVersion to switch the version number in the `setup.cfg` and
    `src/depmap_downloader/version.py` to not have the `-dev` suffix
 2. Packages the code in both a tar archive and a wheel
-3. Uploads to PyPI using `twine`. Be sure to have a `.pypirc` file configured to avoid the need for manual input at this
-   step
-4. Push to GitHub. You'll need to make a release going with the commit where the version was bumped.
-5. Bump the version to the next patch. If you made big changes and want to bump the version by minor, you can
-   use `tox -e bumpversion minor` after.
+3. Uploads to PyPI using `twine`. Be sure to have a `.pypirc` file configured to
+   avoid the need for manual input at this step
+4. Push to GitHub. You'll need to make a release going with the commit where the
+   version was bumped.
+5. Bump the version to the next patch. If you made big changes and want to bump
+   the version by minor, you can use `tox -e bumpversion minor` after.
+
 </details>
