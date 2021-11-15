@@ -17,7 +17,7 @@ import logging
 from typing import Optional
 
 import click
-from more_click import force_option
+from more_click import force_option, verbose_option
 
 from .api import ensure_achilles_gene_dependencies, ensure_crispr_gene_dependencies
 
@@ -28,13 +28,16 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-@click.group()
+@click.command()
+@verbose_option
 @force_option
 @click.option("--version", help="DepMap version, otherwise defaults to latest.")
 def main(version: Optional[str], force: bool):
     """CLI for depmap_downloader."""
-    ensure_crispr_gene_dependencies(version=version, force=force)
-    ensure_achilles_gene_dependencies(version=version, force=force)
+    path = ensure_crispr_gene_dependencies(version=version, force=force)
+    click.echo(f"downloaded {path}")
+    path = ensure_achilles_gene_dependencies(version=version, force=force)
+    click.echo(f"downloaded {path}")
 
 
 if __name__ == "__main__":

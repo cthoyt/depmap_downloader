@@ -35,7 +35,7 @@ CRISPR_NAME = "CRISPR_gene_dependency.csv"
 @lru_cache(1)
 def get_latest() -> str:
     """Get the latest release name."""
-    latest = next(release for release in get_downloads_table() if release["isLatest"])
+    latest = next(release for release in get_downloads_table()["releaseData"] if release["isLatest"])
     return latest["releaseName"]
 
 
