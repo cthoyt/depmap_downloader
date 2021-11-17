@@ -6,6 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
+import bs4
 import pystow
 import requests
 
@@ -16,6 +17,8 @@ __all__ = [
     "ensure_crispr_gene_dependencies",
     "get_achilles_gene_dependencies_url",
     "ensure_achilles_gene_dependencies",
+    "get_rnai_essentiality",
+    "get_crispr_essentiality",
 ]
 
 URL = "https://depmap.org/portal/download/api/downloads"
@@ -53,6 +56,7 @@ def crispr_gene_dependencies_url(version: Optional[str] = None) -> str:
     return _help_download(CRISPR_NAME, version=version)
 
 
+#: Columns: genes in the format "HUGO (Entrez)" - Rows: cell lines (Broad IDs)
 def ensure_crispr_gene_dependencies(version: Optional[str] = None, force: bool = False) -> Path:
     """Ensure the CRISPR gene dependencies file is downloaded."""
     if version is None:
@@ -70,6 +74,7 @@ def get_achilles_gene_dependencies_url(version: Optional[str] = None) -> str:
     return _help_download(ACHILLES_NAME, version=version)
 
 
+# Columns: genes in the format "HUGO (Entrez)" - Rows: cell lines (Broad IDs)
 def ensure_achilles_gene_dependencies(version: Optional[str] = None, force: bool = False) -> Path:
     """Ensure the Achilles gene dependencies file is downloaded."""
     if version is None:
@@ -80,3 +85,23 @@ def ensure_achilles_gene_dependencies(version: Optional[str] = None, force: bool
         name=ACHILLES_NAME,
         force=force,
     )
+
+
+def get_crispr_essentiality(symbol: str) -> float:
+    """Get essentiality of the gene in the CRISPR experiments."""
+    return _get_essentiality(symbol, "crispr")
+
+
+def get_rnai_essentiality(symbol: str) -> float:
+    """Get essentiality of the gene in the RNAi experiments."""
+    return _get_essentiality(symbol, "rnai")
+
+
+def _get_essentiality(symbol: str, dataset: str) -> float:
+    url = f"https://depmap.org/portal/tile/gene/essentiality/{symbol}"
+    res = requests.get(url).json()
+    soup = bs4.BeautifulSoup(res["html"], features="html.parser")
+    element = soup.find("h4", **{"class": dataset})
+    fraction = element.text.split(":")[-1]
+    num, denom = [float(part) for part in fraction.split("/")]
+    return num / denom

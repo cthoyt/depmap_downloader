@@ -7,4 +7,6 @@ from .api import (  # noqa:F401
     ensure_achilles_gene_dependencies,
     ensure_crispr_gene_dependencies,
     get_achilles_gene_dependencies_url,
+    get_crispr_essentiality,
+    get_rnai_essentiality,
 )
